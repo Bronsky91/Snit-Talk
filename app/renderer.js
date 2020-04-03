@@ -7,6 +7,12 @@ const onButton = document.getElementById("onBtn");
 const offButton = document.getElementById("offBtn");
 const packageSelect = document.getElementById("packages");
 
+function getSnits(){
+  axios.get(ENDPOINT + "snit/"+packageSelect.value).then(res => {
+    ipcRenderer.send("setPackage", res.data);
+  });
+}
+
 axios.get(ENDPOINT + "snit-packages/").then(res => {
   for (let p of res.data) {
     var option = document.createElement("option");
@@ -14,6 +20,7 @@ axios.get(ENDPOINT + "snit-packages/").then(res => {
     option.value = p.id;
     packageSelect.add(option);
   }
+  getSnits()
 });
 
 onButton.addEventListener("click", function() {
@@ -25,7 +32,5 @@ offButton.addEventListener("click", function() {
 });
 
 packageSelect.addEventListener("change", function() {
-    axios.get(ENDPOINT + "snit/"+packageSelect.value).then(res => {
-        ipcRenderer.send("setPackage", res.data);
-      });
+  getSnits()
   });

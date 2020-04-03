@@ -52,21 +52,32 @@ ipcMain.on("snitCheck", (event, snit) => {
 });
 
 let currentPackage = {};
+let usedSnits = [];
 ipcMain.on("setPackage", (event, package) => {
   currentPackage = package;
+  usedSnits = [];
 });
 
 app.whenReady().then(() => {
   globalShortcut.register("CommandOrControl+X", () => {
     if (snitOn) {
-      let snit = random_snit(currentPackage.snitList)
+      let snit = random_snit(currentPackage.snitList);
+      console.log(snit);
       py.spawn("python", ["./type.py", snit]);
     } else {
       console.log("not on");
     }
   });
 
-  function random_snit(items) {
-    return items[Math.floor(Math.random() * items.length)].snit;
+  function random_snit(snitList) {
+    if(usedSnits.length == snitList.length){
+      usedSnits = [];
+    }
+    let newSnit = snitList[Math.floor(Math.random() * snitList.length)].snit
+    if(!usedSnits.includes(newSnit)){
+      usedSnits.push(newSnit);
+      return newSnit;
+    }
+    return random_snit(snitList);
   }
 });
