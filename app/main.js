@@ -23,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -61,8 +61,8 @@ ipcMain.on("setPackage", (event, package) => {
 app.whenReady().then(() => {
   globalShortcut.register("CommandOrControl+X", () => {
     if (snitOn) {
-      let snit = random_snit(currentPackage.snitList);
-      console.log(snit);
+      let snit = random_snit(currentPackage.snitList)
+      console.log(snit)
       py.spawn("python", ["./type.py", snit]);
     } else {
       console.log("not on");

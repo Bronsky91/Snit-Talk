@@ -1,8 +1,15 @@
 const Express = require("express");
 const Mongoose = require("mongoose");
 const BodyParser = require("body-parser");
+const https = require('https');
+const fs = require('fs');
+const basicAuth = require('express-basic-auth')
 
 var app = Express();
+
+app.use(basicAuth({
+  users: { 'admin': 'strifelord' }
+}))
 
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
@@ -57,10 +64,10 @@ app.post("/snit-package", async (req, res) => {
 
 app.post("/snit-submit/:id", async (req, res) => {
   try {
-    PackageModel.findById(req.params.id, function(err, package) {
+    PackageModel.findById(req.params.id, function (err, package) {
       if (err) res.send(err);;
       package.snitList.push(req.body);
-      package.save(function(err) {
+      package.save(function (err) {
         if (err) res.json(err);
         res.json({
           package
@@ -74,23 +81,32 @@ app.post("/snit-submit/:id", async (req, res) => {
 });
 
 app.post("/snit-remove/:id", async (req, res) => {
-    try {
-      PackageModel.findById(req.params.id, function(err, package) {
-        if (err) res.send(err);;
-        package.snitList.pull(req.body);
-        package.save(function(err) {
-          if (err) res.json(err);
-          res.json({
-            package
-          });
+  try {
+    PackageModel.findById(req.params.id, function (err, package) {
+      if (err) res.send(err);;
+      package.snitList.pull(req.body);
+      package.save(function (err) {
+        if (err) res.json(err);
+        res.json({
+          package
         });
       });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
-    }
-  });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
 
 app.listen(3000, () => {
-  console.log("Listening at :3000...");
+  console.log("Listening at http://localhost:3000");
 });
+
+/* https.createServer({
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem'),
+  passphrase: 'tipthewench'
+}, app)s
+.listen(port, () => {
+  console.log("Running RestHub on port " + port);
+}); */
