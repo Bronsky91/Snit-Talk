@@ -57,14 +57,29 @@ ipcMain.on("setPackage", (event, package) => {
 });
 
 let keys = []
-ipcMain.on("hotKeySetup", (event, newKeys) => {
+ipcMain.on("hotKeyUpdate", (event, newKeys) => {
   keys = newKeys
+});
+
+ipcMain.on("hotKeySetup", (event, setup) => {
+  if (BrowserWindow.getAllWindows().length < 2) {
+    const adminWindow = new BrowserWindow({
+      width: 500,
+      height: 300,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+    adminWindow.loadFile("hotkey-setup.html");
+    // Open the DevTools.
+    adminWindow.webContents.openDevTools();
+  };
 });
 
 app.whenReady().then(() => {
 
   globalShortcut.register(keys.join('+'), () => {
-    
+
   })
 
   globalShortcut.register("CommandOrControl+X", () => {
@@ -79,7 +94,7 @@ app.whenReady().then(() => {
 
   globalShortcut.register("Alt+S+N+I+T", () => {
     // Create the browser window.
-    if (BrowserWindow.getAllWindows().length < 2){
+    if (BrowserWindow.getAllWindows().length < 2) {
       const adminWindow = new BrowserWindow({
         width: 500,
         height: 300,
@@ -88,15 +103,12 @@ app.whenReady().then(() => {
         }
       });
       adminWindow.loadFile("admin.html");
-        // Open the DevTools.
-        adminWindow.webContents.openDevTools();
+      // Open the DevTools.
+      adminWindow.webContents.openDevTools();
     };
   });
 
 });
-
-
-
 
 function random_snit(snitList) {
   if (usedSnits.length == snitList.length) {

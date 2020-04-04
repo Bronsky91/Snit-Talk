@@ -6,9 +6,15 @@ const ENDPOINT = "http://warlock.tech:3000/";
 const username = 'admin';
 const password = 'strifelord';
 
+const hotkeyShow = document.getElementById('hotkeyShow');
+
 hotkeys('*', function(event, handler) {
     // Prevent the default refresh event under WINDOWS system
     event.preventDefault();
-    console.log(event);
-    
+    hotkeyShow.innerText = event.key;
   });
+
+
+  // Show hotkey pressed, hit button to confirm
+  // Makes a new line
+  // Up to 3

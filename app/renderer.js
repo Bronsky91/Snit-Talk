@@ -19,6 +19,7 @@ const submitSnit = document.getElementById("submit-snit");
 const loginButton = document.getElementById("loginBtn");
 const signUpButton = document.getElementById("signUpBtn");
 const goToSignUpButton = document.getElementById("goToSignUp");
+const hotkeyUpdate = document.getElementById("hotkeyUpdate");
 
 // Input Fields
 const snitSubmission = document.getElementById("submission");
@@ -146,4 +147,8 @@ goToSignUpButton.addEventListener('click', function () {
   loginPage.classList.add('hide');
   signUpPage.classList.remove('hide');
 });
+
+hotkeyUpdate.addEventListener('click', function() {
+  ipcRenderer.send("hotKeySetup", true);
+})
 
