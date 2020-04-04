@@ -7,6 +7,7 @@ const {
   global
 } = require("electron");
 const py = require("child_process");
+const { dialog } = require('electron')
 
 function createWindow() {
   // Create the browser window.
@@ -22,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -61,18 +62,22 @@ ipcMain.on("hotKeyUpdate", (event, newKeys) => {
   keys = newKeys
 });
 
+ipcMain.on('alert', (event, options) => {
+  dialog.showMessageBoxSync(options);
+});
+
 ipcMain.on("hotKeySetup", (event, setup) => {
   if (BrowserWindow.getAllWindows().length < 2) {
-    const adminWindow = new BrowserWindow({
+    const hotkeyWindow = new BrowserWindow({
       width: 500,
       height: 300,
       webPreferences: {
         nodeIntegration: true
       }
     });
-    adminWindow.loadFile("hotkey-setup.html");
+    hotkeyWindow.loadFile("hotkey-setup.html");
     // Open the DevTools.
-    adminWindow.webContents.openDevTools();
+    //hotkeyWindow.webContents.openDevTools();
   };
 });
 

@@ -38,6 +38,8 @@ function getSnits() {
     }
   }).then(res => {
     ipcRenderer.send("setPackage", res.data);
+  }).catch(err => {
+    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
   });
 }
 
@@ -52,8 +54,10 @@ function sendSnit(snit, id) {
     },
     data: { snit }
   }).then(res => {
-    alert("Snit Submitted!");
-  })
+    ipcRenderer.send("alert", {title: 'OH SNIT!', message: "Snit Submitted!"});
+  }).catch(err => {
+    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
+  });
 }
 
 function login(data) {
@@ -69,7 +73,7 @@ function login(data) {
     loginPage.classList.add('hide');
     homePage.classList.remove('hide');
   }).catch(err => {
-    alert(err);
+    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
   });
 }
 
@@ -86,7 +90,7 @@ function signUp(data) {
     signUpEmail.classList.add('hide');
     loginPage.classList.remove('hide');
   }).catch(err => {
-    alert(err);
+    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
   });
 }
 
@@ -125,7 +129,7 @@ packageSelect.addEventListener("change", function () {
 });
 
 loginButton.addEventListener("click", function () {
-  if (!loginUsername == "") {
+  if (!loginUsername.value == "") {
     login({
       username: loginUsername.value,
       password: loginPassword.value
