@@ -7,6 +7,8 @@ const password = 'strifelord';
 
 const onButton = document.getElementById("onBtn");
 const offButton = document.getElementById("offBtn");
+const submitSnit = document.getElementById("submit-snit");
+const snitSubmission = document.getElementById("submission");
 const packageSelect = document.getElementById("packages");
 
 function getSnits() {
@@ -18,6 +20,11 @@ function getSnits() {
   }).then(res => {
     ipcRenderer.send("setPackage", res.data);
   });
+}
+
+function sendSnit(newSnit) {
+  // Axios Put call to submit new snit to "Snit Packages"
+  
 }
 
 axios.get(ENDPOINT + "snit-packages/", {
@@ -33,6 +40,10 @@ axios.get(ENDPOINT + "snit-packages/", {
     packageSelect.add(option);
   }
   getSnits()
+});
+
+submitSnit.addEventListener("click", function(){
+  sendSnit(snitSubmission.value);
 });
 
 onButton.addEventListener("click", function () {

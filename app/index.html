@@ -3,13 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <link rel="stylesheet" type="text/css" href="assets/index-style.css" />
     <title>Snit Talk</title>
   </head>
   <body>
     <h1>Snit Talk</h1>
-    <button id="onBtn">On</button>
-    <button id="offBtn">Off</button>
-    <select id='packages'></select>
+    <div class="flex column main">
+      <div>
+        <button id="onBtn">On</button>
+        <button id="offBtn">Off</button>
+        <div style='margin-top: 1em;'>
+          <label>Snit Packages:</label>
+          <select id="packages"></select>
+        </div>
+      </div>
+      <div>
+        <div>
+          <label>Submit your own Snit to the "Snit Talkers" Package</label>
+          <input type="text" id="submission" />
+          <button id="submit-snit">Submit Snit</button>
+        </div>
+      </div>
+    </div>
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
   </body>

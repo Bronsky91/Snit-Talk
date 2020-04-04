@@ -1,0 +1,12 @@
+.flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.main {
+    justify-content: space-between;
+    height: 280px;
+}
