@@ -8,16 +8,55 @@
   </head>
   <body>
     <h1>Snit Talk</h1>
-    <div class="flex column main">
-      <div>
-        <button id="onBtn">On</button>
-        <button id="offBtn">Off</button>
-        <div style='margin-top: 1em;'>
-          <label>Snit Packages:</label>
-          <select id="packages"></select>
+
+    <div id="login" class="main flex column">
+      <div class="flex column">
+        <div>
+          <label>Username:</label>
+          <input id="loginUsername" />
         </div>
+        <div>
+          <label>Password:</label>
+          <input id="loginPassword" />
+        </div>
+        <button id="loginBtn">Login</button>
       </div>
       <div>
+        <button id="goToSignUp">Sign Up</button>
+      </div>
+    </div>
+
+    <div id="signUp" class="hide">
+      <div class="flex column">
+        <div>
+          <div>
+            <label>Email:</label>
+            <input id="signUpEmail" />
+          </div>
+          <div>
+            <label>Username:</label>
+            <input id="signUpUsername" />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input id="signUpPassword" />
+          </div>
+          <button id="signUpBtn">Sign Up</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="home" class="hide">
+      <div class="flex column main">
+        <div>
+          <button id="onBtn">On</button>
+          <button id="offBtn">Off</button>
+          <button id="hotkeyUpdate">Update HotKeys</button>
+          <div style="margin-top: 1em;">
+            <label>Snit Packages:</label>
+            <select id="packages"></select>
+          </div>
+        </div>
         <div>
           <label>Submit your own Snit to the "Snit Talkers" Package</label>
           <input type="text" id="submission" />

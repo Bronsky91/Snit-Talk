@@ -1,6 +1,7 @@
 const Express = require("express");
 const Mongoose = require("mongoose");
 const BodyParser = require("body-parser");
+const bcrypt = require('bcryptjs')
 const https = require('https');
 const fs = require('fs');
 const basicAuth = require('express-basic-auth')
@@ -26,6 +27,53 @@ const PackageModel = Mongoose.model("package", {
     }
   ]
 });
+
+const UserModel = Mongoose.model("user", {
+  username: { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true },
+  email: { type: String },
+  hotkeys: [
+    {
+      hotkey: String
+    }
+  ]
+});
+
+app.post("/user-signup", async (req, res) => {
+  try {
+    console.log(req);
+    var user = new UserModel();
+    console.log(user)
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.passwordHash = bcrypt.hashSync(req.body.password, 10);
+    // save the user and check for errors
+    user.save(function (err) {
+      res.json({
+        data: user
+      });
+    });
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
+
+app.post("/user-login", async (req, res) => {
+  try {
+    UserModel.findOne({ username: req.body.username },
+      function (err, user) {
+        if (!user) {
+          return res.status(401).send({ message: "The username does not exist" });
+        }
+        if (!bcrypt.compareSync(req.body.password, user.passwordHash)) {
+          return res.status(401).send({ message: "The password is invalid" });
+        }
+        res.json(user);
+      });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+})
 
 app.get("/snit-packages", async (req, res) => {
   try {

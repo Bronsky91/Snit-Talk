@@ -7,7 +7,6 @@ const {
   global
 } = require("electron");
 const py = require("child_process");
-const axios = require("axios");
 
 function createWindow() {
   // Create the browser window.
@@ -44,8 +43,7 @@ app.on("activate", function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+
 let snitOn = true;
 ipcMain.on("snitCheck", (event, snit) => {
   snitOn = snit;
@@ -58,7 +56,17 @@ ipcMain.on("setPackage", (event, package) => {
   usedSnits = [];
 });
 
+let keys = []
+ipcMain.on("hotKeySetup", (event, newKeys) => {
+  keys = newKeys
+});
+
 app.whenReady().then(() => {
+
+  globalShortcut.register(keys.join('+'), () => {
+    
+  })
+
   globalShortcut.register("CommandOrControl+X", () => {
     if (snitOn) {
       let snit = random_snit(currentPackage.snitList)
@@ -86,6 +94,8 @@ app.whenReady().then(() => {
   });
 
 });
+
+
 
 
 function random_snit(snitList) {
