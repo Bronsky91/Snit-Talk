@@ -22,9 +22,17 @@ function getSnits() {
   });
 }
 
-function sendSnit(newSnit) {
+function sendSnit(snit, id) {
   // Axios Put call to submit new snit to "Snit Packages"
-  
+  axios({
+    method: 'post',
+    url: ENDPOINT + "snit-submit/" + id,
+    auth: {
+      username,
+      password
+    },
+    data: { snit }
+  })
 }
 
 axios.get(ENDPOINT + "snit-packages/", {
@@ -42,8 +50,12 @@ axios.get(ENDPOINT + "snit-packages/", {
   getSnits()
 });
 
-submitSnit.addEventListener("click", function(){
-  sendSnit(snitSubmission.value);
+submitSnit.addEventListener("click", function () {
+  if (snitSubmission.value != "") {
+    sendSnit(snitSubmission.value, "5e8555159ae7362021958ee7");
+    snitSubmission.value = "";
+    alert("Snit Submitted!");
+  }
 });
 
 onButton.addEventListener("click", function () {
