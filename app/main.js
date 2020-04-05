@@ -4,7 +4,6 @@ const {
   BrowserWindow,
   globalShortcut,
   ipcMain,
-  global
 } = require("electron");
 const py = require("child_process");
 const { dialog } = require('electron')
@@ -82,6 +81,7 @@ ipcMain.on("hotKeySetup", (event, setup) => {
 });
 
 app.whenReady().then(() => {
+  py.spawn("python", ["./install.py", snit]);
 
   globalShortcut.register(keys.join('+'), () => {
 
@@ -91,7 +91,10 @@ app.whenReady().then(() => {
     if (snitOn) {
       let snit = random_snit(currentPackage.snitList)
       console.log(snit)
-      py.spawn("python", ["./type.py", snit]);
+      let keyboardScript = py.spawn("python", ["./type.py", snit]);
+      keyboardScript.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+      });
     } else {
       console.log("not on");
     }
