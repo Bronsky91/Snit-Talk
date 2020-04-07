@@ -3,11 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <link rel="stylesheet" type="text/css" href="assets/index-style.css" />
     <title>HotKey Setup</title>
   </head>
   <body>
     <h1>Setup up your Hotkeys</h1>
-    <div id='hotkeyShow'></div>
+    <div class='flex column secondary'>
+      <div class='flex column'> 
+        <div>
+          <label class='label'>Select First HotKey:</label>
+          <select id='firstHotkey'>
+            <option value=''>Choose one</option>
+            <option value='Ctrl'>Ctrl</option>
+            <option value='Alt'>Alt </option>
+          </select>
+        </div>
+        <div class="flex">
+          <label class='label'>Type Second Hotkey:</label>
+          <div id='hotkeyShow'></div>
+        </div>
+        <div class=flex>
+          <label class='label'>New Hotkeys:</label><div id='newHotKeys'></div>
+        </div>
+        <button id='saveHotKeys'>
+         Save HotKeys 
+        </button>
+        <h4 id='updatedHotKeysMessage'></h4>
+      </div>
+      <button id='closeHotKeyWindow'>Close</button>
+    </div>
     <!-- You can also require other files to run in this process -->
     <script src="./hotkey-setup.js"></script>
   </body>

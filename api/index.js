@@ -77,6 +77,26 @@ app.post("/user-login", async (req, res) => {
   }
 });
 
+app.post("/user-hotkeys", async (req, res) => {
+  try {
+    UserModel.findById({ _id: req.body.id}, function (err, user) {
+      if (err) res.send(err);
+      for(let hk of req.body.newHotKeys){
+        user.hotkeys.push(hk);
+      }
+      user.save(function (err) {
+        if (err) res.json(err);
+        res.json({
+          user,
+        });
+      });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
 // TODO: Add endpoint for updating hotkeys on users
 // Test to make sure the order of the array stays
 

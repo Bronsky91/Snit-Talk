@@ -55,21 +55,22 @@ ipcMain.on("snitCheck", (event, snit) => {
   snitOn = snit;
 });
 
+let userId = ""
+ipcMain.on("userId", (event, newUserId) => {
+  userId = newUserId;
+  console.log(userId)
+})
+
 var lastHotkeys = [];
 ipcMain.on("hotKeyUpdate", (event, keys) => {
-  console.log(keys)
-  console.log(keys.join('+'))
-  if(lastHotkeys.length > 0){
+  if (lastHotkeys.length > 0) {
     globalShortcut.unregister(lastHotkeys.join('+'))
   }
   globalShortcut.register(keys.join('+'), () => {
     if (snitOn) {
       let snit = random_snit(currentPackage.snitList)
-      console.log(snit)
-      let keyboardScript = py.spawn("python", ["./type.py", snit]);
-      keyboardScript.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-      });
+      console.log(snit);
+      py.spawn("python", ["./type.py", snit]);
     } else {
       console.log("not on");
     }
@@ -81,9 +82,10 @@ ipcMain.on('alert', (event, options) => {
   dialog.showMessageBoxSync(options);
 });
 
+let hotkeyWindow;
 ipcMain.on("hotKeySetup", (event, setup) => {
   if (BrowserWindow.getAllWindows().length < 2) {
-    const hotkeyWindow = new BrowserWindow({
+    hotkeyWindow = new BrowserWindow({
       width: 500,
       height: 300,
       webPreferences: {
@@ -92,9 +94,17 @@ ipcMain.on("hotKeySetup", (event, setup) => {
     });
     hotkeyWindow.loadFile("hotkey-setup.html");
     // Open the DevTools.
-    //hotkeyWindow.webContents.openDevTools();
+    hotkeyWindow.webContents.openDevTools();
+    hotkeyWindow.webContents.on('did-finish-load', () => {
+      console.log(userId)
+      hotkeyWindow.webContents.send('userId', userId);
+    })
   };
 });
+
+ipcMain.on('closeHotKeyWindow', (event) => {
+  hotkeyWindow.close();
+})
 
 app.whenReady().then(() => {
   // py.spawn("python", ["./install.py", snit]);
