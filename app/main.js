@@ -43,12 +43,6 @@ app.on("activate", function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-
-let snitOn = true;
-ipcMain.on("snitCheck", (event, snit) => {
-  snitOn = snit;
-});
-
 let currentPackage = {};
 let usedSnits = [];
 ipcMain.on("setPackage", (event, package) => {
@@ -56,9 +50,30 @@ ipcMain.on("setPackage", (event, package) => {
   usedSnits = [];
 });
 
-let keys = []
-ipcMain.on("hotKeyUpdate", (event, newKeys) => {
-  keys = newKeys
+let snitOn = true;
+ipcMain.on("snitCheck", (event, snit) => {
+  snitOn = snit;
+});
+
+var lastHotkeys = [];
+ipcMain.on("hotKeyUpdate", (event, keys) => {
+  console.log(keys)
+  if(lastHotkeys.length > 0){
+    globalShortcut.unregister(lastHotkeys.join('+'))
+  }
+  globalShortcut.register(keys.join('+'), () => {
+    if (snitOn) {
+      let snit = random_snit(currentPackage.snitList)
+      console.log(snit)
+      let keyboardScript = py.spawn("python", ["./type.py", snit]);
+      keyboardScript.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+      });
+    } else {
+      console.log("not on");
+    }
+  });
+  lastHotkeys = keys;
 });
 
 ipcMain.on('alert', (event, options) => {
@@ -81,24 +96,7 @@ ipcMain.on("hotKeySetup", (event, setup) => {
 });
 
 app.whenReady().then(() => {
-  py.spawn("python", ["./install.py", snit]);
-
-  globalShortcut.register(keys.join('+'), () => {
-
-  })
-
-  globalShortcut.register("CommandOrControl+X", () => {
-    if (snitOn) {
-      let snit = random_snit(currentPackage.snitList)
-      console.log(snit)
-      let keyboardScript = py.spawn("python", ["./type.py", snit]);
-      keyboardScript.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-      });
-    } else {
-      console.log("not on");
-    }
-  });
+  // py.spawn("python", ["./install.py", snit]);
 
   globalShortcut.register("Alt+S+N+I+T", () => {
     // Create the browser window.

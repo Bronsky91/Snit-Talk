@@ -14,7 +14,7 @@ hotkeys('*', function(event, handler) {
     hotkeyShow.innerText = event.key;
   });
 
-
+  //ipcRenderer.send("hotKeyUpdate", keysUpdate);
   // Show hotkey pressed, hit button to confirm
   // Makes a new line
   // Up to 3

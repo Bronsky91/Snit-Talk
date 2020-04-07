@@ -20,6 +20,7 @@ const loginButton = document.getElementById("loginBtn");
 const signUpButton = document.getElementById("signUpBtn");
 const goToSignUpButton = document.getElementById("goToSignUp");
 const hotkeyUpdate = document.getElementById("hotkeyUpdate");
+const signUpBack = document.getElementById("signUpBack");
 
 // Input Fields
 const snitSubmission = document.getElementById("submission");
@@ -72,6 +73,8 @@ function login(data) {
   }).then(res => {
     loginPage.classList.add('hide');
     homePage.classList.remove('hide');
+    //ipcRenderer.send("hotKeyUpdate", res.hotkeys);
+    ipcRenderer.send("hotKeyUpdate", ['Control','b']);
   }).catch(err => {
     ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
   });
@@ -109,7 +112,8 @@ axios.get(ENDPOINT + "snit-packages/", {
   getSnits()
 });
 
-submitSnit.addEventListener("click", function () {
+submitSnit.addEventListener("click", function (event) {
+  event.preventDefault();
   if (snitSubmission.value != "") {
     sendSnit(snitSubmission.value, "5e8555159ae7362021958ee7");
     snitSubmission.value = "";
@@ -128,7 +132,8 @@ packageSelect.addEventListener("change", function () {
   getSnits()
 });
 
-loginButton.addEventListener("click", function () {
+loginButton.addEventListener("click", function (event) {
+  event.preventDefault();
   if (!loginUsername.value == "") {
     login({
       username: loginUsername.value,
@@ -137,7 +142,8 @@ loginButton.addEventListener("click", function () {
   }
 });
 
-signUpButton.addEventListener('click', function (){
+signUpButton.addEventListener('click', function (event){
+  event.preventDefault();
   if (!signUpUsername == "" && !signUpEmail == ""){
     signUp({
       email: signUpEmail.value,
@@ -151,6 +157,11 @@ goToSignUpButton.addEventListener('click', function () {
   loginPage.classList.add('hide');
   signUpPage.classList.remove('hide');
 });
+
+signUpBack.addEventListener('click', function() {
+  signUpPage.classList.add('hide');
+  loginPage.classList.remove('hide');
+})
 
 hotkeyUpdate.addEventListener('click', function() {
   ipcRenderer.send("hotKeySetup", true);

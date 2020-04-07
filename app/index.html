@@ -10,25 +10,25 @@
     <h1>Snit Talk</h1>
 
     <div id="login" class="main flex column">
-      <div class="flex column">
+      <form class="flex column">
         <div>
           <label>Username:</label>
           <input id="loginUsername" />
         </div>
         <div>
           <label>Password:</label>
-          <input id="loginPassword" />
+          <input type='password' id="loginPassword" />
         </div>
         <button id="loginBtn">Login</button>
-      </div>
+      </form>
       <div>
-        <button id="goToSignUp">Sign Up</button>
+        <button type='submit' id="goToSignUp">Sign Up</button>
       </div>
     </div>
 
     <div id="signUp" class="hide">
-      <div class="flex column">
-        <div>
+      <div class="flex column main">
+        <form>
           <div>
             <label>Email:</label>
             <input id="signUpEmail" />
@@ -39,10 +39,11 @@
           </div>
           <div>
             <label>Password:</label>
-            <input id="signUpPassword" />
+            <input type='password' id="signUpPassword" />
           </div>
-          <button id="signUpBtn">Sign Up</button>
-        </div>
+          <button type='submit' id="signUpBtn">Sign Up</button>
+        </form>
+        <button id='signUpBack'>Back</button>
       </div>
     </div>
     
@@ -58,9 +59,11 @@
           </div>
         </div>
         <div>
-          <label>Submit your own Snit to the "Snit Talkers" Package</label>
-          <input type="text" id="submission" />
-          <button id="submit-snit">Submit Snit</button>
+          <form>
+            <label>Submit your own Snit to the "Snit Talkers" Package</label>
+            <input type="text" id="submission" />
+            <button type='submit' id="submit-snit">Submit Snit</button>
+          </form>
         </div>
       </div>
     </div>
