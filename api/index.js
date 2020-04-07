@@ -1,16 +1,18 @@
 const Express = require("express");
 const Mongoose = require("mongoose");
 const BodyParser = require("body-parser");
-const bcrypt = require('bcryptjs')
-const https = require('https');
-const fs = require('fs');
-const basicAuth = require('express-basic-auth')
+const bcrypt = require("bcryptjs");
+const https = require("https");
+const fs = require("fs");
+const basicAuth = require("express-basic-auth");
 
 var app = Express();
 
-app.use(basicAuth({
-  users: { 'admin': 'strifelord' }
-}))
+app.use(
+  basicAuth({
+    users: { admin: "strifelord" },
+  })
+);
 
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
@@ -23,9 +25,9 @@ const PackageModel = Mongoose.model("package", {
   name: { type: String },
   snitList: [
     {
-      snit: String
-    }
-  ]
+      snit: String,
+    },
+  ],
 });
 
 const UserModel = Mongoose.model("user", {
@@ -34,46 +36,49 @@ const UserModel = Mongoose.model("user", {
   email: { type: String },
   hotkeys: [
     {
-      hotkey: String
-    }
-  ]
+      hotkey: String,
+    },
+  ],
 });
 
 app.post("/user-signup", async (req, res) => {
   try {
     console.log(req);
     var user = new UserModel();
-    console.log(user)
+    console.log(user);
     user.username = req.body.username;
     user.email = req.body.email;
     user.passwordHash = bcrypt.hashSync(req.body.password, 10);
+    user.hotkeys = [{ hotkey: "alt" }, { hotkey: "s" }]; // Default Hotkeys
     // save the user and check for errors
     user.save(function (err) {
       res.json({
-        data: user
+        data: user,
       });
     });
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
 app.post("/user-login", async (req, res) => {
   try {
-    UserModel.findOne({ username: req.body.username },
-      function (err, user) {
-        if (!user) {
-          return res.status(401).send({ message: "The username does not exist" });
-        }
-        if (!bcrypt.compareSync(req.body.password, user.passwordHash)) {
-          return res.status(401).send({ message: "The password is invalid" });
-        }
-        res.json(user);
-      });
+    UserModel.findOne({ username: req.body.username }, function (err, user) {
+      if (!user) {
+        return res.status(401).send({ message: "The username does not exist" });
+      }
+      if (!bcrypt.compareSync(req.body.password, user.passwordHash)) {
+        return res.status(401).send({ message: "The password is invalid" });
+      }
+      res.json(user);
+    });
   } catch (err) {
     res.status(500).send(err);
   }
-})
+});
+
+// TODO: Add endpoint for updating hotkeys on users
+// Test to make sure the order of the array stays
 
 app.get("/snit-packages", async (req, res) => {
   try {
@@ -82,7 +87,7 @@ app.get("/snit-packages", async (req, res) => {
     for (let package of packages) {
       resBody.push({
         name: package.name,
-        id: package._id
+        id: package._id,
       });
     }
     res.send(resBody);
@@ -113,12 +118,12 @@ app.post("/snit-package", async (req, res) => {
 app.post("/snit-submit/:id", async (req, res) => {
   try {
     PackageModel.findById(req.params.id, function (err, package) {
-      if (err) res.send(err);;
+      if (err) res.send(err);
       package.snitList.push(req.body);
       package.save(function (err) {
         if (err) res.json(err);
         res.json({
-          package
+          package,
         });
       });
     });
@@ -131,12 +136,12 @@ app.post("/snit-submit/:id", async (req, res) => {
 app.post("/snit-remove/:id", async (req, res) => {
   try {
     PackageModel.findById(req.params.id, function (err, package) {
-      if (err) res.send(err);;
+      if (err) res.send(err);
       package.snitList.pull(req.body);
       package.save(function (err) {
         if (err) res.json(err);
         res.json({
-          package
+          package,
         });
       });
     });

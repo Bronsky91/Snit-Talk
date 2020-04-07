@@ -74,7 +74,7 @@ function login(data) {
     loginPage.classList.add('hide');
     homePage.classList.remove('hide');
     //ipcRenderer.send("hotKeyUpdate", res.hotkeys);
-    ipcRenderer.send("hotKeyUpdate", ['Control','b']);
+    ipcRenderer.send("hotKeyUpdate", ['alt','s']); // TODO: Change when ready to ship!
   }).catch(err => {
     ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
   });

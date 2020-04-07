@@ -58,6 +58,7 @@ ipcMain.on("snitCheck", (event, snit) => {
 var lastHotkeys = [];
 ipcMain.on("hotKeyUpdate", (event, keys) => {
   console.log(keys)
+  console.log(keys.join('+'))
   if(lastHotkeys.length > 0){
     globalShortcut.unregister(lastHotkeys.join('+'))
   }
