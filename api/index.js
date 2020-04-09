@@ -64,10 +64,10 @@ app.post("/user-signup", async (req, res) => {
 });
 
 app.post("/user-admin", async (req, res) => {
-  try{
+  try {
     UserModel.findOne({ username: req.body.username }, function (err, user) {
-      if (!user){
-        return res.status(404).send({ message: "The username does not exist"});
+      if (!user) {
+        return res.status(404).send({ message: "The username does not exist" });
       }
       user.admin = req.body.admin;
       user.save(function (err) {
@@ -77,7 +77,7 @@ app.post("/user-admin", async (req, res) => {
         });
       });
     });
-  } catch(error){
+  } catch (error) {
 
   }
 });
@@ -199,6 +199,26 @@ app.post("/snit-remove/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
+  }
+});
+
+app.get("/snit-remove-package/:id", async (req, res) => {
+  try{
+    PackageModel.remove({ _id: req.params.id }, async err => {
+      if (err) res.status(500).send(err);
+      var packages = await PackageModel.find().exec();
+      var resBody = [];
+      for (let package of packages) {
+        resBody.push({
+          name: package.name,
+          id: package._id,
+        });
+      }
+      res.send(resBody);
+    });
+  } catch (err){
+    console.log(err);
+    res.status(500).send(err);
   }
 });
 
