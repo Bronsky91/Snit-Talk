@@ -7,28 +7,28 @@
     <title>Snit Talk</title>
   </head>
   <body>
-    <h1>Snit Talk</h1>
+    <h1 >Snit Talk</h1>
 
     <div id="login" class="main flex column">
-      <form class="flex column">
+      <form class="flex column container">
         <div>
-          <label>Username:</label>
+          <label >Username:</label>
           <input id="loginUsername" />
         </div>
         <div>
           <label>Password:</label>
           <input type='password' id="loginPassword" />
         </div>
-        <button id="loginBtn">Login</button>
+        <button class='white blue-background form-button' id="loginBtn">Login</button>
       </form>
       <div>
-        <button type='submit' id="goToSignUp">Sign Up</button>
+        <button type='submit' id="goToSignUp" class='white blue-background'>Sign Up</button>
       </div>
     </div>
 
     <div id="signUp" class="hide">
       <div class="flex column main">
-        <form>
+        <form class='container'>
           <div>
             <label>Email:</label>
             <input id="signUpEmail" />
@@ -41,18 +41,19 @@
             <label>Password:</label>
             <input type='password' id="signUpPassword" />
           </div>
-          <button type='submit' id="signUpBtn">Sign Up</button>
+          <button class='white blue-background form-button' type='submit' id="signUpBtn">Sign Up</button>
         </form>
-        <button id='signUpBack'>Back</button>
+        <button class='white blue-background' id='signUpBack'>Back</button>
       </div>
     </div>
     
     <div id="home" class="hide">
       <div class="flex column main">
         <div>
-          <button id="onBtn">On</button>
-          <button id="offBtn">Off</button>
-          <button id="hotkeyUpdate">Update HotKeys</button>
+          <button class='white blue-background' id="onBtn">On</button>
+          <button class='white blue-background' id="offBtn">Off</button>
+          <span id='onOrOff'></span>
+          <button class='white blue-background' id="hotkeyUpdate">Update HotKeys</button>
           <div style="margin-top: 1em;">
             <label>Snit Packages:</label>
             <select id="packages"></select>
@@ -68,7 +69,7 @@
           <form>
             <label>Submit your own Snit to the "Snit Talkers" Package</label>
             <input type="text" id="submission" />
-            <button type='submit' id="submit-snit">Submit Snit</button>
+            <button class='white blue-background' type='submit' id="submit-snit">Submit Snit</button>
           </form>
         </div>
       </div>

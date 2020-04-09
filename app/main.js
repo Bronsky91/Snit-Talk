@@ -21,9 +21,11 @@ function createWindow() {
 
   // and load the index.html of the app.
   mainWindow.loadFile("index.html");
-
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('onOrOff', snitOn);
+  });
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -54,7 +56,10 @@ ipcMain.on("setPackage", (event, package) => {
 let snitOn = true;
 ipcMain.on("snitCheck", (event, snit) => {
   snitOn = snit;
+  mainWindow.webContents.send('onOrOff', snitOn);
 });
+
+
 
 let userId = ""
 ipcMain.on("userId", (event, newUserId) => {
@@ -99,7 +104,7 @@ ipcMain.on("hotKeySetup", (event, setup) => {
     });
     hotkeyWindow.loadFile("hotkey-setup.html");
     // Open the DevTools.
-    hotkeyWindow.webContents.openDevTools();
+    //hotkeyWindow.webContents.openDevTools();
     hotkeyWindow.webContents.on('did-finish-load', () => {
       hotkeyWindow.webContents.send('userId', userId);
     });
@@ -125,7 +130,7 @@ app.whenReady().then(() => {
       });
       adminWindow.loadFile("admin.html");
       // Open the DevTools.
-      adminWindow.webContents.openDevTools();
+      //adminWindow.webContents.openDevTools();
     };
   });
 

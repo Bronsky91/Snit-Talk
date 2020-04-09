@@ -31,6 +31,11 @@ const signUpEmail = document.getElementById("signUpEmail");
 const signUpUsername = document.getElementById("signUpUsername");
 const signUpPassword = document.getElementById("signUpPassword");
 const currentHotKeys = document.getElementById("currentHotKeys");
+const onOrOff = document.getElementById('onOrOff');
+
+ipcRenderer.on('onOrOff', function (event, snitOn) {
+  onOrOff.innerText = snitOn ? "On" : "Off"
+})
 
 ipcRenderer.on('currentHotKeys', function (event, hotkeys) {
   currentHotKeys.innerText = hotkeys[0].hotkey + " + " + hotkeys[1].hotkey;

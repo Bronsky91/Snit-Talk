@@ -1,5 +1,47 @@
+* {
+  color: #7289DA
+}
+
+.container {
+  width: 100px;
+  clear: both;
+}
+
+.container input {
+  width: 100%;
+  clear: both;
+}
+
+.form-button {
+  margin-top: 2em;
+}
+
+body {
+  background-color: #36393F;
+}
+
 .flex {
   display: flex;
+}
+
+.blue {
+  color: #7289DA
+}
+
+.blue-background{
+  background-color: #7289DA;
+}
+
+.white {
+  color: white !important;
+}
+
+.dark {
+  background-color: #36393F;
+}
+
+.darker{
+  background-color: #2F3136;
 }
 
 .column {
@@ -13,7 +55,7 @@
 
 .secondary {
   justify-content: space-between;
-  height: 150px;
+  height: 180px;
 }
 
 .hide {
