@@ -59,7 +59,6 @@ ipcMain.on("snitCheck", (event, snit) => {
 let userId = ""
 ipcMain.on("userId", (event, newUserId) => {
   userId = newUserId;
-  console.log(userId)
 })
 
 var lastHotkeys = [];

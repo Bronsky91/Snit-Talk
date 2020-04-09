@@ -3,11 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <link rel="stylesheet" type="text/css" href="assets/index-style.css" />
     <title>SUPER SECRET ADMIN PANEL</title>
   </head>
   <body>
     <h1>SUPER SECRET ADMIN PANEL</h1>
     <!-- You can also require other files to run in this process -->
+      <div class="flex column secondary">
+        <div>
+          <div style="margin-top: 1em;">
+            <label>Choose a Snit Package to add to:</label>
+            <select id="packages"></select>
+          </div>
+          <form class='flex column'>
+            <div class='flex'>
+              <label>New Snit:</label>
+              <input id='newSnit'/>
+            </div>
+            <div>
+              <button type='submit' id='addSnitButton'>Add to Package</button>
+            </div>
+          </form>
+        </div>
+        <form>
+          <label>
+            Create a Snit Package:
+          </label>
+          <input id='newPackage'/>
+          <button type='submit' id='createSnitBtn'>Create</button>
+        </form>
+        <div></div>
+      </div>
     <script src="./admin-renderer.js"></script>
   </body>
 </html>
