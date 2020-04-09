@@ -116,7 +116,7 @@ ipcMain.on('closeHotKeyWindow', (event) => {
 })
 
 app.whenReady().then(() => {
-  // py.spawn("python", ["./install.py", snit]);
+  py.spawn("python", ["./install.py"]);
 
   globalShortcut.register("Alt+S+N+I+T", () => {
     // Create the browser window.
