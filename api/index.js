@@ -34,6 +34,7 @@ const UserModel = Mongoose.model("user", {
   username: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
   email: { type: String },
+  admin: { type: Boolean },
   hotkeys: [
     {
       hotkey: String,
@@ -50,6 +51,7 @@ app.post("/user-signup", async (req, res) => {
     user.email = req.body.email;
     user.passwordHash = bcrypt.hashSync(req.body.password, 10);
     user.hotkeys = [{ hotkey: "alt" }, { hotkey: "s" }]; // Default Hotkeys
+    user.admin = false;
     // save the user and check for errors
     user.save(function (err) {
       res.json({
@@ -58,6 +60,25 @@ app.post("/user-signup", async (req, res) => {
     });
   } catch (err) {
     res.status(500).send(err);
+  }
+});
+
+app.post("/user-admin", async (req, res) => {
+  try{
+    UserModel.findOne({ username: req.body.username }, function (err, user) {
+      if (!user){
+        return res.status(404).send({ message: "The username does not exist"});
+      }
+      user.admin = req.body.admin;
+      user.save(function (err) {
+        if (err) res.json(err);
+        res.json({
+          user,
+        });
+      });
+    });
+  } catch(error){
+
   }
 });
 
@@ -79,10 +100,11 @@ app.post("/user-login", async (req, res) => {
 
 app.post("/user-hotkeys", async (req, res) => {
   try {
-    UserModel.findById({ _id: req.body.id}, function (err, user) {
+    UserModel.findById({ _id: req.body.id }, function (err, user) {
       if (err) res.send(err);
-      for(let hk of req.body.newHotKeys){
-        user.hotkeys.push(hk);
+      user.hotkeys = [];
+      for (let hotkey of req.body.newHotKeys) {
+        user.hotkeys.push({ hotkey });
       }
       user.save(function (err) {
         if (err) res.json(err);
@@ -111,6 +133,15 @@ app.get("/snit-packages", async (req, res) => {
       });
     }
     res.send(resBody);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.get("/users", async (req, res) => {
+  try {
+    var users = await UserModel.find().exec();
+    res.send(users);
   } catch (error) {
     res.status(500).send(error);
   }

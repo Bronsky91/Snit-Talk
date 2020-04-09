@@ -2,23 +2,21 @@ const { ipcRenderer, remote } = require("electron");
 const axios = require("axios");
 const hotkeys = require("hotkeys-js");
 
-const ENDPOINT = "http://warlock.tech:3000/";
+const ENDPOINT = "http://localhost:3000/";
 const username = 'admin';
 const password = 'strifelord';
 
 let userId = "";
 
 ipcRenderer.on('userId', function (event, id) {
-  console.log(id)
   userId = id;
-})
+});
 
 const hotkeyShow = document.getElementById('hotkeyShow');
 
 // Inputs
 const firstHotkey = document.getElementById("firstHotkey");
 const newHotKeys = document.getElementById("newHotKeys");
-const updatedHotKeysMessage = document.getElementById("updatedHotKeysMessage");
 
 // Buttons
 const closeHotKeyWindow = document.getElementById('closeHotKeyWindow');
@@ -47,9 +45,7 @@ saveHotKeys.addEventListener('click', function () {
 });
 
 function updateHotKeys(hks) {
-  let data = { newHotKeys: hks, id: userId }
-  console.log(data)
-  // hotkeys = [{hotkey: 'key'}, {hotkey: 'key2'}]
+  let data = { newHotKeys: hks, id: userId };
   axios({
     method: 'post',
     url: ENDPOINT + "user-hotkeys/",
@@ -60,7 +56,7 @@ function updateHotKeys(hks) {
     data
   }).then(res => {
     ipcRenderer.send("hotKeyUpdate", Object.values(res.data.user.hotkeys));
-    updatedHotKeysMessage.innerText = "Hotkeys have been updated!"
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: "Hotkeys have been updated!" });
   }).catch(err => {
     ipcRenderer.send("alert", { title: 'OH SNIT!', message: err.message });
   });

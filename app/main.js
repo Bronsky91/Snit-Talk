@@ -8,9 +8,10 @@ const {
 const py = require("child_process");
 const { dialog } = require('electron')
 
+let mainWindow;
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 400,
     height: 400,
     webPreferences: {
@@ -22,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -63,10 +64,14 @@ ipcMain.on("userId", (event, newUserId) => {
 
 var lastHotkeys = [];
 ipcMain.on("hotKeyUpdate", (event, keys) => {
+  const newHotKeys = [];
+  for (const k of keys){
+    newHotKeys.push(k.hotkey);
+  }
   if (lastHotkeys.length > 0) {
     globalShortcut.unregister(lastHotkeys.join('+'))
   }
-  globalShortcut.register(keys.join('+'), () => {
+  globalShortcut.register(newHotKeys.join('+'), () => {
     if (snitOn) {
       let snit = random_snit(currentPackage.snitList)
       console.log(snit);
@@ -75,7 +80,8 @@ ipcMain.on("hotKeyUpdate", (event, keys) => {
       console.log("not on");
     }
   });
-  lastHotkeys = keys;
+  mainWindow.webContents.send("currentHotKeys", keys);
+  lastHotkeys = newHotKeys;
 });
 
 ipcMain.on('alert', (event, options) => {
@@ -96,9 +102,8 @@ ipcMain.on("hotKeySetup", (event, setup) => {
     // Open the DevTools.
     hotkeyWindow.webContents.openDevTools();
     hotkeyWindow.webContents.on('did-finish-load', () => {
-      console.log(userId)
       hotkeyWindow.webContents.send('userId', userId);
-    })
+    });
   };
 });
 

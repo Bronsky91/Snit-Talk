@@ -3,7 +3,7 @@ const axios = require("axios");
 const hotkeys = require("hotkeys-js");
 
 // API Constants
-const ENDPOINT = "http://warlock.tech:3000/";
+const ENDPOINT = "http://localhost:3000/";
 const username = 'admin';
 const password = 'strifelord';
 
@@ -30,6 +30,11 @@ const loginPassword = document.getElementById("loginPassword");
 const signUpEmail = document.getElementById("signUpEmail");
 const signUpUsername = document.getElementById("signUpUsername");
 const signUpPassword = document.getElementById("signUpPassword");
+const currentHotKeys = document.getElementById("currentHotKeys");
+
+ipcRenderer.on('currentHotKeys', function (event, hotkeys) {
+  currentHotKeys.innerText = hotkeys[0].hotkey + " + " + hotkeys[1].hotkey;
+});
 
 function getSnits() {
   axios.get(ENDPOINT + "snit/" + packageSelect.value, {
@@ -40,7 +45,7 @@ function getSnits() {
   }).then(res => {
     ipcRenderer.send("setPackage", res.data);
   }).catch(err => {
-    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: err.message });
   });
 }
 
@@ -55,9 +60,9 @@ function sendSnit(snit, id) {
     },
     data: { snit }
   }).then(res => {
-    ipcRenderer.send("alert", {title: 'OH SNIT!', message: "Snit Submitted!"});
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: "Snit Submitted!" });
   }).catch(err => {
-    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: err.message });
   });
 }
 
@@ -73,11 +78,11 @@ function login(data) {
   }).then(res => {
     loginPage.classList.add('hide');
     homePage.classList.remove('hide');
-    //ipcRenderer.send("hotKeyUpdate", res.hotkeys);
-    ipcRenderer.send("hotKeyUpdate", ['alt','s']); // TODO: Change when ready to ship!
+    ipcRenderer.send("hotKeyUpdate", res.data.hotkeys);
+   // currentHotKeys.innerText = res.data.hotkeys[0].hotkey + " + " + res.data.hotkeys[1].hotkey;
     ipcRenderer.send("userId", res.data._id)
   }).catch(err => {
-    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: err.message });
   });
 }
 
@@ -94,7 +99,7 @@ function signUp(data) {
     signUpEmail.classList.add('hide');
     loginPage.classList.remove('hide');
   }).catch(err => {
-    ipcRenderer.send("alert", {title: 'OH SNIT!', message: err.message});
+    ipcRenderer.send("alert", { title: 'OH SNIT!', message: err.message });
   });
 }
 
@@ -143,9 +148,9 @@ loginButton.addEventListener("click", function (event) {
   }
 });
 
-signUpButton.addEventListener('click', function (event){
+signUpButton.addEventListener('click', function (event) {
   event.preventDefault();
-  if (!signUpUsername == "" && !signUpEmail == ""){
+  if (!signUpUsername == "" && !signUpEmail == "") {
     signUp({
       email: signUpEmail.value,
       username: signUpUsername.value,
@@ -159,12 +164,12 @@ goToSignUpButton.addEventListener('click', function () {
   signUpPage.classList.remove('hide');
 });
 
-signUpBack.addEventListener('click', function() {
+signUpBack.addEventListener('click', function () {
   signUpPage.classList.add('hide');
   loginPage.classList.remove('hide');
 })
 
-hotkeyUpdate.addEventListener('click', function() {
+hotkeyUpdate.addEventListener('click', function () {
   ipcRenderer.send("hotKeySetup", true);
 })
 
